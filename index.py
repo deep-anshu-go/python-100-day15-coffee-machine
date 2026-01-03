@@ -61,15 +61,15 @@ def is_resources_available(coffee_resources, user_input_coffee_name):
     return available, ingredient
 
 def is_enough_resource_available(coffee_resources, coffee_name):
-    is_enough_resource = ""
+    is_enough_resource = "yes"
     ingredient = ""
     for resource in resources:
         if(resource in coffee_resources):
             if(resources[resource] - coffee_resources[resource] < 0):
                 is_enough_resource = "no"
                 ingredient = resource
+                print()
             else:  
-                is_enough_resource = "yes"
                 resources.update({resource :resources[resource] - coffee_resources[resource]})
 
     return is_enough_resource, ingredient
