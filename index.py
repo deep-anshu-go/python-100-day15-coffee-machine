@@ -44,49 +44,58 @@ def checkSecretCode():
     else:
         askMenu(MENU, msg = "**Inavlid Secret**")
 
-def get_total_ingredients_arr():
-    max_ingredient_length = 0
-    total_ingredients = {} 
-    for key in MENU:
-        ingredient_length = len(MENU[key]["ingredients"])
-        if(ingredient_length > max_ingredient_length):
-            max_ingredient_length = ingredient_length
-            total_ingredients = MENU[key]["ingredients"]
-    
-    ingredients = []
-    for key in total_ingredients:
-        ingredients.append(key)
-    
-    return ingredients
-    
+def fill_missing_ingredients():
+    resources_ingredients_length = len(resources)
+    for coffee in MENU:
+        for ingredients in resources:
+            if(not ingredients in MENU[coffee]["ingredients"]):
+                MENU[coffee]["ingredients"].update({ingredients: 0})
+              
+def is_resources_available(coffee_resources, user_input_coffee_name):
+    available = "yes"
+    ingredient = ""
+    for ingredients in coffee_resources:
+        if(not ingredients in resources):
+            available = "no"
+            ingredient = ingredients
+    return available, ingredient
 
-def check_ingredients(coffee_name):
-    
-    ingredients = get_total_ingredients_arr()
-    coffee_ingredients = MENU[coffee_name]["ingredients"]
-    for ingredient in ingredients:
-        try:
-            MENU[coffee_name]["ingredients"][ingredient]
-        except KeyError:
-            coffee_ingredients.update({ingredient: 0})
-            
-    
-    return coffee_ingredients
+def is_enough_resource_available(coffee_resources, coffee_name):
+    is_enough_resource = ""
+    ingredient = ""
+    for resource in resources:
+        if(resource in coffee_resources):
+            if(resources[resource] - coffee_resources[resource] < 0):
+                is_enough_resource = "no"
+                ingredient = resource
+            else:  
+                is_enough_resource = "yes"
+                resources.update({resource :resources[resource] - coffee_resources[resource]})
 
-def check_coffee_resources(coffee_name):
-    check_ingredients(coffee_name)
-    # you are here you got the coffee ingredients 
-
+    return is_enough_resource, ingredient
+    
+    
+def calculate_coffee_resources(coffee_name):
+    coffee_resources = MENU[coffee_name]["ingredients"]
+    available, unavailable_ingredient = is_resources_available(coffee_resources, coffee_name)
+    if(available == "yes"):
+        is_enough_resource, ingredient = is_enough_resource_available(coffee_resources, coffee_name)
+        if(is_enough_resource == "yes"):
+            print(f"Enjoy sir, Here is you {coffee_name}")    
+        else:
+            print(f"Sorry there is not enough {ingredient}")
+    else:
+        print(f"{coffee_name.capitalize()} requires {unavailable_ingredient}, which we don’t have right now.")
         
-
 def check_coffee(user_input):
     if user_input in MENU:
-        check_coffee_resources(coffee_name = user_input)
+        calculate_coffee_resources(coffee_name=user_input)
     else:
         return "Invalid coffee name"
 
 def coffeeMachine():
-   
+    fill_missing_ingredients()
+    # what fill missing ingredients do ? it fill the missing ingredients that is in the resoures but not in the coffee ingredients with the value 0
     on = True
     while(on):
         user_input = askMenu(MENU)
@@ -98,4 +107,5 @@ def coffeeMachine():
             on = False
         else:
             check_coffee(user_input)
+
 coffeeMachine()

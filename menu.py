@@ -11,6 +11,7 @@ MENU = {
             "water": 200,
             "milk": 150,
             "coffee": 24,
+            "sugar": 22
         },
         "cost": 2.5,
     },
