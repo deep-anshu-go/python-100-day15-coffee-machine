@@ -10,7 +10,7 @@ resources = {
 coins = {
     "quarters": 0.25,
     "dimes": 0.10,
-    "nickels": 0.05,  # Spelling corrected from 'nickles'
+    "nickels": 0.05,  
     "pennies": 0.01
 }
 
@@ -19,11 +19,10 @@ money = 0
 def formatResources(resources):
     print("\nResources")
     for key in resources:
-        # Python Syntax Fix: Changed inner double quotes to single quotes to avoid errors
         print(f"{key} - {resources[key]}{'ml' if key in ('water', 'milk') else 'g' if key == 'coffee' else ''}")
         
 def restartMachine(machine):
-    input("Press Enter ---->") # Capitalization
+    input("Press Enter ---->")
     machine()
 
 def report(money = 0, machine = None):
@@ -35,7 +34,6 @@ def showMenu(menu):
     print(art.coffee_art)
     print("Welcome!")
     for coffee in menu:
-        # Python Syntax Fix: Changed inner double quotes to single quotes
         print(f"{coffee.capitalize()} - ${menu[coffee]['cost']}")
 
 def askMenu(menu, msg = ""):
@@ -51,7 +49,7 @@ def checkSecretCode():
     if(secret_code == "offcoff"):
         return False
     else:
-        askMenu(MENU, msg = "**Invalid Secret**") # Spelling corrected from 'Inavlid'
+        askMenu(MENU, msg = "**Invalid Secret**")
 
 def fill_missing_ingredients():
     for coffee in MENU:
@@ -95,7 +93,7 @@ def insert_coins(coffee_name):
             total_amount = calculate_user_coin(user_input_coin)
             
             print(f"\nCoins Refunded: ${total_amount}")
-            msg = "Invalid coin entry" # Capitalization
+            msg = "Invalid coin entry"
 
             is_enough_money = "no"
     
@@ -104,7 +102,7 @@ def insert_coins(coffee_name):
     
     if(total_amount != coffee_price):
         is_enough_money = "no"
-        msg = "Sorry, that's not enough money." # Punctuation added
+        msg = "Sorry, that's not enough money."
         print(f"\nMoney Refunded: ${total_amount}")
 
     return is_enough_money, msg
@@ -129,13 +127,12 @@ def calculate_coffee_resources(coffee_name, machine = None):
     if(available == "yes"):
         is_enough_resource, ingredient = is_enough_resource_available(coffee_resources, coffee_name, machine)
         if(is_enough_resource != "yes"):
-            print(f"Sorry, there is not enough {ingredient}") # Punctuation
+            print(f"Sorry, there is not enough {ingredient}")
         else:
-             # Here you are pending calculating resources 
             is_enough_money, msg = insert_coins(coffee_name)
             if(is_enough_money == "yes"):
                 use_resource(coffee_name)
-                print(f"Enjoy, sir. Here is your {coffee_name}")  # Punctuation and phrasing
+                print(f"Enjoy, sir. Here is your {coffee_name}") 
                 restart_machine = machine()
             else:
                 print(msg)
@@ -152,14 +149,14 @@ def check_coffee(user_input, machine = None):
 
 def coffeeMachine():
     fill_missing_ingredients()
-    # What does fill_missing_ingredients do? It fills the missing ingredients that are in the resources but not in the coffee ingredients with the value 0
+
     on = True
     while(on):
         user_input = askMenu(MENU)
         if(user_input == "off"):
            on = checkSecretCode()
         elif(user_input == "report"):
-            # Here, I pass the machine function which is coffeeMachine() to the report function to restart the machine after looking at the report
+
             report(machine = coffeeMachine)
             on = False
         else:
